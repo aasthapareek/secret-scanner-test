@@ -1,0 +1,52 @@
+# Database Configuration
+# Environment-specific database settings
+
+production:
+  adapter: postgresql
+  host: prod-db-master.c9akciq32.us-east-1.rds.amazonaws.com
+  port: 5432
+  database: app_production
+  username: db_admin
+  password: Xk9mN3pQ7rS2tU6vW8yZ1aC4bE5fG8hJ
+  pool: 25
+  timeout: 5000
+
+  # Replica for read operations
+  replica:
+    host: prod-db-replica.c9akciq32.us-east-1.rds.amazonaws.com
+    username: db_reader
+    password: Lm2nO5pQ8rS1tU4vW7xY0zA3bC6dE9fG
+
+staging:
+  adapter: postgresql
+  host: staging-db.c9akciq32.us-east-1.rds.amazonaws.com
+  database: app_staging
+  username: staging_user
+  password: Hj7kL0mN3oP6qR9sT2uV5wX8yZ1aB4cD
+
+# MongoDB Configuration
+mongodb:
+  production:
+    uri: mongodb+srv://mongo_admin:Qr5sT8uV1wX4yZ7aB0cD3eF6gH9iJ2kL@cluster0.abc123.mongodb.net/production
+    database: app_production
+
+  analytics:
+    uri: mongodb://analytics_user:Mn4oP7qR0sT3uV6wX9yZ2aB5cE8fG1hI@analytics-mongo.example.com:27017/analytics
+
+# Redis Configuration
+redis:
+  production:
+    url: redis://:Bc6dE9fG2hI5jK8lM1nO4pQ7rS0tU3vW@redis-prod.example.com:6379/0
+    sentinels:
+      - host: sentinel1.example.com
+        port: 26379
+        password: Ef9gH2iJ5kL8mN1oP4qR7sT0uV3wX6yZ
+
+  cache:
+    url: redis://cache_user:Gh2iJ5kL8mN1oP4qR7sT0uV3wX6yZ9aB@cache.example.com:6379/1
+
+# Elasticsearch
+elasticsearch:
+  hosts:
+    - https://elastic_admin:Ij5kL8mN1oP4qR7sT0uV3wX6yZ9aB2cD@es-prod.example.com:9243
+  api_key: aBcDeFgHiJkLmNoPqRsTuVwXyZ0123456789AbCdEfGh==

@@ -1,0 +1,72 @@
+version: '3.8'
+
+services:
+  api:
+    build: .
+    ports:
+      - "8080:8080"
+    environment:
+      # AWS Credentials
+      AWS_ACCESS_KEY_ID: AKIAWR5LMPK2NXEXAMPLE
+      AWS_SECRET_ACCESS_KEY: wX7yZ0aB3cD6eF9gH2iJ5kL8mN1oP4qR7sT0uVwX
+
+      # Database
+      DATABASE_URL: postgres://db_user:xY0zA3bC6dE9fG2hI5jK8lM1nO4pQ7rS@db.example.com:5432/production
+
+      # Redis
+      REDIS_URL: redis://default:yZ0aB3cD6dE9fG2hI5jK8lM1nO4pQ7rS0t@redis.example.com:6379
+
+      # Stripe
+      STRIPE_SECRET_KEY: sk_live_51MnOpQrStUvWxYz0123456789AbCdEfGhIjKlMnOpQrStUvWxYz012345
+
+      # OpenAI
+      OPENAI_API_KEY: sk-zA3bC6dE9fT3BlbkFJG2hI5jK8lM1nO4pQ7rSt
+
+      # SendGrid
+      SENDGRID_API_KEY: SG.zA3bC6dE9fG2hI5jK8lM1n.O4pQ7rS0tU3vW6xY9zA2bC5dE8fG1hI4jK7lM0n
+
+      # Slack
+      SLACK_BOT_TOKEN: xoxb-456789012345-4567890123456-cDeFgHiJkLmNoPqRsTuVwXyZ
+
+      # JWT
+      JWT_SECRET: aB3cD6dE9fG2hI5jK8lM1nO4pQ7rS0tU3vW6xY9zA2bC5dE8fG1hI4jK7lM
+
+  worker:
+    build:
+      context: .
+      dockerfile: Dockerfile.worker
+    environment:
+      # GitHub Token
+      GITHUB_TOKEN: ghp_bCdEfGhIjKlMnOpQrStUvWxYz0123456789Ab
+
+      # GitLab Token
+      GITLAB_TOKEN: glpat-cD6dE9fG2hI5jK8lM1nO4pQ
+
+      # NPM Token
+      NPM_TOKEN: npm_dE9fG2hI5jK8lM1nO4pQ7rS0tU3vW6xY9zA2bC
+
+      # PyPI Token
+      PYPI_API_TOKEN: pypi-AgEIcHlwaS5vcmcCJGVmOWcyaGk1aks4bE0xbk80cFE3clMwdFUzdlc2eFk5ekEy
+
+  db:
+    image: postgres:15
+    environment:
+      POSTGRES_PASSWORD: eF9gG2hI5jK8lM1nO4pQ7rS0tU3vW6xY
+      POSTGRES_USER: admin
+      POSTGRES_DB: production
+
+  redis:
+    image: redis:7
+    command: redis-server --requirepass fG2hI5jK8lM1nO4pQ7rS0tU3vW6xY9zA
+
+  mongo:
+    image: mongo:6
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: gH5iJ8kL1mN4oP7qR0sT3uV6wX9yZ2aB
+
+  elasticsearch:
+    image: elasticsearch:8.9.0
+    environment:
+      ELASTIC_PASSWORD: hI5jK8lM1nO4pQ7rS0tU3vW6xY9zA2bC5d
+      xpack.security.enabled: "true"

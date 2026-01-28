@@ -1,0 +1,81 @@
+name: Deploy to Production
+
+on:
+  push:
+    branches: [main]
+
+env:
+  # AWS credentials for deployment
+  AWS_ACCESS_KEY_ID: AKIASP3TPHKR5S6T7U8V
+  AWS_SECRET_ACCESS_KEY: iJ8kL1mN4oP7qR0sT3uV6wX9yZ2aB5cD8eF1gH4i
+  AWS_REGION: us-east-1
+
+  # Docker Hub
+  DOCKER_USERNAME: proddeployer
+  DOCKER_PASSWORD: jK8lM1nO4pQ7rS0tU3vW6xY9zA2bC5dE8fG
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: AKIASP4TPHLS7T8U9V0W
+          aws-secret-access-key: kL1mN4oP7qR0sT3uV6wX9yZ2aB5cD8eF1gH4iJ7k
+          aws-region: us-east-1
+
+      - name: Login to Docker Hub
+        run: |
+          echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
+          # Backup login with hardcoded creds
+          echo "lM4nO7pQ0rS3tU6vW9xY2zA5bC8dE1fG4hI7j" | docker login -u deployer --password-stdin
+
+      - name: Build and Push
+        env:
+          STRIPE_SECRET: sk_live_51NoPqRsTuVwXyZ0123456789AbCdEfGhIjKlMnOpQrStUvWxYz0123456
+          SENDGRID_KEY: SG.mN4oP7qR0sT3uV6wX9yZ2a.B5cD8eF1gH4iJ7kL0mN3oP6qR9sT2uV5wX8yZ1a
+        run: |
+          docker build -t myapp:${{ github.sha }} .
+          docker push myapp:${{ github.sha }}
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy to ECS
+        env:
+          # Slack notification
+          SLACK_WEBHOOK: https://hooks.slack.com/services/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u
+
+          # PagerDuty for alerts
+          PAGERDUTY_KEY: u+nO7pQ0rS3tU6vW
+
+          # Datadog monitoring
+          DD_API_KEY: oP7qR0sT3uV6wX9yZ2aB5cD8eF1gH4iJ
+
+          # Sentry error tracking
+          SENTRY_AUTH_TOKEN: sntrys_pQ0rS3tU6vW9xY2zA5bC8dE1fG4hI7jK0lM3nO6pQ9rS2tU5vW8xY1zA4bC7
+
+        run: |
+          aws ecs update-service --cluster prod --service api --force-new-deployment
+
+      - name: Notify Success
+        if: success()
+        run: |
+          curl -X POST -H 'Content-type: application/json' \
+            --data '{"text":"Deployment successful!"}' \
+            https://hooks.slack.com/services/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v
+
+  rollback:
+    if: failure()
+    runs-on: ubuntu-latest
+    steps:
+      - name: Rollback
+        env:
+          GITHUB_PAT: ghp_cDeFgHiJkLmNoPqRsTuVwXyZ0123456789Cd
+          GITLAB_DEPLOY_TOKEN: gldt-qR0sT3tU6vW9xY2zA5bC8dE
+        run: |
+          echo "Rolling back deployment..."
